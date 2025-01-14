@@ -1,4 +1,3 @@
-<!-- templates/admin.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +7,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: #1a1a1a;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
             color: white;
             min-height: 100vh;
             padding: 20px;
@@ -25,33 +24,73 @@
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 3.5em;
             margin: 20px 0;
-            color: #4a90e2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #4a90e2, #63b3ed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .game-setup {
-            background: #2d2d2d;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 400px;
-        }
-
-        #winner-display {
-            background: #2d2d2d;
+            background: rgba(45, 45, 45, 0.9);
             border-radius: 20px;
             padding: 30px;
             margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .score-limit-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 15px;
+        }
+
+        .score-limit-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #4a90e2;
+        }
+
+        .score-limit-input {
+            width: 150px;
+            padding: 12px;
+            font-size: 1.2em;
+            border: 2px solid #4a90e2;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+        }
+
+        #winner-display {
+            background: rgba(45, 45, 45, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px auto;
             max-width: 800px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
         .winner-celebration {
-            animation: celebrate 1s ease-in-out infinite;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
-            background-size: 600% 100%;
+            animation: celebrate 2s ease-in-out infinite;
+            background: linear-gradient(45deg, #ff0000, #ff8c00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+            background-size: 700% 100%;
+            padding: 40px;
+            transform: scale(1.05);
+        }
+
+        .big-winner-image {
+            max-width: 600px !important;
+            max-height: 600px !important;
+            transition: all 0.5s ease !important;
         }
 
         @keyframes celebrate {
@@ -61,21 +100,31 @@
         }
 
         #winner-name {
-            font-size: 2.5em;
+            font-size: 3em;
             margin: 20px 0;
-            color: #4a90e2;
+            background: linear-gradient(45deg, #4a90e2, #63b3ed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         #winner-image {
             max-width: 400px;
             max-height: 400px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             margin: 20px auto;
+            border: 5px solid #4a90e2;
+            transition: transform 0.3s ease;
+        }
+
+        #winner-image:hover {
+            transform: scale(1.05);
         }
 
         .button {
-            background: #e74c3c;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
             color: white;
             border: none;
             padding: 15px 40px;
@@ -83,72 +132,114 @@
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             margin: 10px;
         }
 
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         .button.correct {
-            background: #2ecc71;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
         }
 
         .button.wrong {
-            background: #e74c3c;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
         }
 
         .status {
-            font-size: 1.5em;
-            color: #666;
+            font-size: 1.8em;
+            color: #999;
             margin: 20px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .scoreboard {
-            background: #2d2d2d;
+            background: rgba(45, 45, 45, 0.9);
             border-radius: 20px;
-            padding: 20px;
+            padding: 30px;
             margin: 20px auto;
-            max-width: 400px;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .scoreboard h2 {
+            color: #4a90e2;
+            margin-bottom: 20px;
+            font-size: 2em;
         }
 
         .score-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #444;
-            font-size: 30px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+        }
 
+        .score-row:hover {
+            background-color: rgba(74, 144, 226, 0.1);
         }
 
         .score-input {
-            width: 60px;
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background: #1a1a1a;
+            width: 80px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #4a90e2;
+            background: rgba(255,255,255,0.1);
             color: white;
             text-align: center;
+            font-size: 1.2em;
         }
 
-        input[type="number"] {
-            background: #1a1a1a;
-            color: white;
-            border: 1px solid #444;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px;
-            font-size:24px;
+        .confetti {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background-color: #f00;
+            animation: confetti-fall 5s linear infinite;
+        }
 
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Trivia Game Control</h1>
+
+        <div class="game-setup" id="setup-container">
+            <div class="score-limit-container">
+                <label for="score-limit">Score Limit to Win</label>
+                <input type="number" id="score-limit" class="score-limit-input" value="10" min="1">
+                <button onclick="setScoreLimit()" class="button">Set Limit</button>
+            </div>
+        </div>
 
         <div id="winner-display">
             <div id="status" class="status">Waiting for players...</div>
@@ -170,15 +261,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         let socket = io();
+        let scoreLimit = 10;
         const status = document.getElementById('status');
         const winnerImage = document.getElementById('winner-image');
         const winnerDisplay = document.getElementById('winner-display');
         const answerButtons = document.getElementById('answer-buttons');
+        let confettiInterval;
 
+        function setScoreLimit() {
+            const limit = parseInt(document.getElementById('score-limit').value);
+            if (limit > 0) {
+                scoreLimit = limit;
+                socket.emit('set_score_limit', { limit: limit });
+
+                const setupContainer = document.getElementById('setup-container');
+                setupContainer.classList.add('fade-out');
+                setTimeout(() => {
+                    setupContainer.style.display = 'none';
+                }, 500);
+
+            }
+        }
+
+        function createConfetti() {
+            clearInterval(confettiInterval);
+            createConfettiBatch();
+
+            confettiInterval = setInterval(createConfettiBatch, 2000);
+
+            setTimeout(() => {
+                clearInterval(confettiInterval);
+            }, 20000);
+        }
+
+        function createConfettiBatch() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
 
         socket.on('buzz_received', (data) => {
             winnerImage.style.display = 'block';
             winnerImage.src = data.image;
+            winnerImage.classList.remove('big-winner-image');
             document.getElementById('winner-name').textContent = data.name;
             status.textContent = "Player Buzzed In!";
             answerButtons.style.display = 'block';
@@ -193,7 +325,11 @@
         function updateScoreboard(scores) {
             const scoresDiv = document.getElementById('scores');
             scoresDiv.innerHTML = '';
-            Object.entries(scores).forEach(([player, score]) => {
+
+            const sortedScores = Object.entries(scores)
+                .sort(([,a], [,b]) => b - a);
+
+            sortedScores.forEach(([player, score]) => {
                 const row = document.createElement('div');
                 row.className = 'score-row';
                 row.innerHTML = `
@@ -216,21 +352,28 @@
         socket.on('game_won', (data) => {
             winnerImage.style.display = 'block';
             winnerImage.src = data.image;
-            document.getElementById('winner-name').textContent = `🎉 ${data.name} Wins! 🎉`;
+            winnerImage.classList.add('big-winner-image');
+            document.getElementById('winner-name').textContent = `🏆 ${data.name} Wins! 🏆`;
             status.textContent = `Final Score: ${data.score} points`;
             answerButtons.style.display = 'none';
             winnerDisplay.classList.add('winner-celebration');
+            createConfetti();
+
+            setTimeout(() => {
+                winnerDisplay.classList.remove('winner-celebration');
+                clearInterval(confettiInterval);
+            }, 20000);
         });
-
-
 
         socket.on('buzzer_reset', () => {
             winnerImage.style.display = 'none';
             winnerImage.src = '';
+            winnerImage.classList.remove('big-winner-image');
             document.getElementById('winner-name').textContent = '';
             status.textContent = "Waiting for players...";
             answerButtons.style.display = 'none';
             winnerDisplay.classList.remove('winner-celebration');
+            clearInterval(confettiInterval);
         });
     </script>
 </body>
