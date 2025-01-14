@@ -1,4 +1,3 @@
-<!-- templates/player.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,6 +35,15 @@
             margin-bottom: 20px;
         }
 
+        .score-display {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #1a73e8;
+        }
+
         #camera-container {
             position: relative;
             width: 100%;
@@ -55,6 +63,8 @@
             width: 100%;
             display: none;
             border-radius: 10px;
+            max-height: 320px;
+            object-fit: contain;
         }
 
         .button {
@@ -108,15 +118,54 @@
             box-shadow: 0 6px 15px rgba(50,205,50,0.3);
         }
 
-        .camera-buttons {
+        .method-select {
             display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .file-upload {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .camera-buttons {
+            display: none;
             gap: 10px;
             justify-content: center;
             margin: 10px 0;
         }
 
-        #start-camera {
+        #file-input {
+            display: none;
+        }
+
+        .file-label {
             background: #34a853;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .winner-message {
+            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+            background-size: 600% 100%;
+            animation: celebrate 1s ease-in-out infinite;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+            display: none;
+        }
+
+        @keyframes celebrate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
@@ -124,6 +173,10 @@
     <div id="registration">
         <h2>Join Trivia Game</h2>
         <input type="text" id="player-name" placeholder="Enter your name">
+
+        <div class="method-select">
+            <button onclick="showFileUpload()" class="button">Upload Photo</button>
+        </div>
 
         <div id="camera-container">
             <video id="camera-view" autoplay playsinline></video>
@@ -134,8 +187,17 @@
             <button id="start-camera" class="button">Start Camera</button>
             <button onclick="takePicture()" class="button" style="display: none;" id="capture-button">Take Picture</button>
         </div>
+
+        <div class="file-upload">
+            <label for="file-input" class="file-label">Choose Photo</label>
+            <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+
         <button onclick="retakePicture()" class="button" style="display: none;" id="retake-button">Retake</button>
         <button onclick="register()" class="button" style="display: none;" id="join-button">Join Game</button>
+
+        <div class="score-display" id="player-score" style="display: none;"></div>
+        <div class="winner-message" id="winner-message"></div>
     </div>
 
     <div id="buzzer"></div>
@@ -150,7 +212,31 @@
         const captureButton = document.getElementById('capture-button');
         const retakeButton = document.getElementById('retake-button');
         const joinButton = document.getElementById('join-button');
+        const cameraButtons = document.querySelector('.camera-buttons');
+        const fileUpload = document.querySelector('.file-upload');
         let imageData = null;
+
+
+        function showFileUpload() {
+            fileUpload.style.display = 'block';
+            cameraButtons.style.display = 'none';
+            document.querySelector('.method-select').style.display = 'none';
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageData = e.target.result;
+                    previewImage.src = imageData;
+                    previewImage.style.display = 'block';
+                    joinButton.style.display = 'block';
+                    retakeButton.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
         startButton.addEventListener('click', async () => {
             try {
@@ -173,13 +259,13 @@
             canvas.getContext('2d').drawImage(cameraView, 0, 0);
             imageData = canvas.toDataURL();
 
-            // Stop camera and show preview
-            stream.getTracks().forEach(track => track.stop());
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
             cameraView.style.display = 'none';
             previewImage.src = imageData;
             previewImage.style.display = 'block';
 
-            // Update buttons
             captureButton.style.display = 'none';
             retakeButton.style.display = 'block';
             joinButton.style.display = 'block';
@@ -189,15 +275,17 @@
             previewImage.style.display = 'none';
             retakeButton.style.display = 'none';
             joinButton.style.display = 'none';
-            startButton.style.display = 'block';
             imageData = null;
+            document.querySelector('.method-select').style.display = 'flex';
+            fileUpload.style.display = 'none';
+            cameraButtons.style.display = 'none';
         }
 
         function register() {
             const name = document.getElementById('player-name').value;
 
             if (!name || !imageData) {
-                alert('Please enter your name and take a picture');
+                alert('Please enter your name and provide a picture');
                 return;
             }
 
@@ -215,6 +303,7 @@
             .then(data => {
                 document.getElementById('registration').style.display = 'none';
                 document.getElementById('buzzer').style.display = 'block';
+                document.getElementById('player-score').style.display = 'block';
             });
         }
 
@@ -228,6 +317,29 @@
 
         socket.on('buzzer_reset', () => {
             buzzer.classList.remove('active');
+        });
+
+        // Score updates
+        socket.on('update_scores', (scores) => {
+            const playerName = document.getElementById('player-name').value;
+            if (scores[playerName] !== undefined) {
+                document.getElementById('player-score').textContent =
+                    `Your Score: ${scores[playerName]} points`;
+            }
+        });
+
+        // Winner celebration
+        socket.on('game_won', (data) => {
+            const playerName = document.getElementById('player-name').value;
+            const winnerMessage = document.getElementById('winner-message');
+
+            if (playerName === data.name) {
+                winnerMessage.textContent = '🎉 YOU WIN! 🎉';
+                winnerMessage.style.display = 'block';
+            } else {
+                winnerMessage.textContent = `🎉 ${data.name} Wins! 🎉`;
+                winnerMessage.style.display = 'block';
+            }
         });
     </script>
 </body>
