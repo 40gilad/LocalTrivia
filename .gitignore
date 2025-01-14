@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment variables
+.env
+
+# Flask instance folder
+instance/
+
+# Static and uploaded files
+static/*
+
+# Ignore uploaded user images but keep the static folder
+!static/
+static/*.jpg
+static/*.png
+static/*.jpeg
+
+# Log files
+*.log
+
+# Virtual environment
+venv/
+.env/
+
+# MacOS and Linux system files
+.DS_Store
+*.swp
+*.swo
+
+# IDE files
+.vscode/
+.idea/
+
