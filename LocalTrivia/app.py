@@ -19,6 +19,18 @@ current_buzzer = None
 if not os.path.exists('static/uploads'):
     os.makedirs('static/uploads')
 
+def clear_uploads_folder():
+    uploads_dir = 'static/uploads'
+    if os.path.exists(uploads_dir):
+        # Delete all files in the folder
+        for filename in os.listdir(uploads_dir):
+            file_path = os.path.join(uploads_dir, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+# Ensure uploads directory exists
+if not os.path.exists('static/uploads'):
+    os.makedirs('static/uploads')
 
 @app.route('/')
 def index():
@@ -123,4 +135,5 @@ def reset_buzzer():
 
 
 if __name__ == '__main__':
+    clear_uploads_folder()
     socketio.run(app, host='0.0.0.0', debug=True, allow_unsafe_werkzeug=True)
