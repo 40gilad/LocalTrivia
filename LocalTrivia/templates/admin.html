@@ -120,6 +120,8 @@
             align-items: center;
             padding: 10px;
             border-bottom: 1px solid #444;
+            font-size: 30px;
+
         }
 
         .score-input {
@@ -139,6 +141,8 @@
             padding: 10px;
             border-radius: 5px;
             margin: 10px;
+            font-size:24px;
+
         }
     </style>
 </head>
@@ -171,14 +175,6 @@
         const winnerDisplay = document.getElementById('winner-display');
         const answerButtons = document.getElementById('answer-buttons');
 
-        function setScoreLimit() {
-            const limit = parseInt(document.getElementById('score-limit').value);
-            if (limit > 0) {
-                socket.emit('set_score_limit', { limit: limit });
-                document.getElementById('score-limit-display').textContent =
-                    `Game will be played to ${limit} points`;
-            }
-        }
 
         socket.on('buzz_received', (data) => {
             winnerImage.style.display = 'block';
