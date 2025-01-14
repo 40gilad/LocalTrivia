@@ -75,7 +75,7 @@
             border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 10px auto;
             width: 100%;
             max-width: 200px;
             transition: background 0.3s;
@@ -193,7 +193,6 @@
             <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <button onclick="retakePicture()" class="button" style="display: none;" id="retake-button">Retake</button>
         <button onclick="register()" class="button" style="display: none;" id="join-button">Join Game</button>
 
         <div class="score-display" id="player-score" style="display: none;"></div>
@@ -276,7 +275,7 @@
             retakeButton.style.display = 'none';
             joinButton.style.display = 'none';
             imageData = null;
-            document.querySelector('.method-select').style.display = 'flex';
+            document.querySelector('.method-select').style.display = 'column';
             fileUpload.style.display = 'none';
             cameraButtons.style.display = 'none';
         }

@@ -71,7 +71,7 @@
             max-height: 400px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            margin: 20px 0;
+            margin: 20px auto;
         }
 
         .button {
@@ -146,15 +146,6 @@
     <div class="container">
         <h1>Trivia Game Control</h1>
 
-        <div class="game-setup">
-            <h2>Game Setup</h2>
-            <div>
-                <input type="number" id="score-limit" min="1" placeholder="Score to win">
-                <button onclick="setScoreLimit()" class="button">Start Game</button>
-            </div>
-            <div id="score-limit-display"></div>
-        </div>
-
         <div id="winner-display">
             <div id="status" class="status">Waiting for players...</div>
             <img id="winner-image" src="" style="display: none;">
@@ -170,8 +161,6 @@
             <h2>Scoreboard</h2>
             <div id="scores"></div>
         </div>
-
-        <button onclick="resetBuzzer()" class="button">Next Question</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -237,15 +226,7 @@
             winnerDisplay.classList.add('winner-celebration');
         });
 
-        function resetBuzzer() {
-            socket.emit('reset_buzzer');
-            winnerImage.style.display = 'none';
-            winnerImage.src = '';
-            document.getElementById('winner-name').textContent = '';
-            status.textContent = "Waiting for players...";
-            answerButtons.style.display = 'none';
-            winnerDisplay.classList.remove('winner-celebration');
-        }
+
 
         socket.on('buzzer_reset', () => {
             winnerImage.style.display = 'none';
